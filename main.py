@@ -17,11 +17,6 @@ async def run_uvicorn():
     """ Запуск Uvicorn-сервера в отдельной задаче """
     config = uvicorn.Config(app, host="0.0.0.0", port=8000, log_level="info")
     server = uvicorn.Server(config)
-
-    # Инициализация базы данных
-    await init_db()
-
-    # Запуск сервера
     await server.serve()
 
 
