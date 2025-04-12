@@ -41,9 +41,17 @@ async def get_session() -> AsyncSession:
 async def init_db():
     """Инициализация базы данных и создание таблиц"""
     async with async_engine.begin() as conn:
-        # Создаем таблицу
+        # Создаем все таблицы, если они не существуют
         await conn.run_sync(Base.metadata.create_all)
-    logger.info("БД инициализирована и таблица создана")
+
+    # Проверка наличия таблицы после инициализации
+    async with async_engine.connect() as conn:
+        result = await conn.execute("SELECT * FROM information_schema.tables WHERE table_name = 'address_info'")
+        tables = result.fetchall()
+        if not tables:
+            logger.info("Таблица 'address_info' не была создана.")
+        else:
+            logger.info("Таблица 'address_info' успешно создана.")
 
 
 async def insert_address_info(address: str, balance_trx: float, session: AsyncSession):

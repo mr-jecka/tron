@@ -13,6 +13,8 @@ services:
             - /etc/timezone:/etc/timezone:ro
         ports:
             - "8000:8000"
+        depends_on:
+            - postgresql
 
     postgresql:
         image: bitnami/postgresql:14.2.0-debian-10-r35
