@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+    bot:
+        container_name: tron
+        build: .
+        networks:
+            - bot_network
+        env_file:
+            - .env
+        volumes:
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+        ports:
+            - "127.0.0.1:8000:8000"
+
+    postgresql:
+        image: bitnami/postgresql:14.2.0-debian-10-r35
+        container_name: db
+        networks:
+            - bot_network
+        ports:
+            -   "127.0.0.1:5432:5432"
+        env_file:
+            - .env
+        volumes:
+            - postgresql_data:/bitnami/postgresql
+            - /etc/localtime:/etc/localtime:ro
+            - /etc/timezone:/etc/timezone:ro
+
+networks:
+    bot_network:
+        driver: bridge
+volumes:
+    postgresql_data:
+        driver: local
