@@ -4,8 +4,8 @@ from src.config import db_database, db_host, db_user, db_port, db_password
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import insert, select
 from datetime import datetime
-from logger import logger
-from models import AddressInfo
+from src.logger import logger
+from src.models import AddressInfo
 
 asyncpg_introspection_issue = dict(connect_args={"server_settings": {"jit": "off"}})
 
