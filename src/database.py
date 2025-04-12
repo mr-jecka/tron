@@ -6,8 +6,11 @@ from sqlalchemy import insert, select
 from datetime import datetime
 from src.logger import logger
 from src.models import AddressInfo
+from sqlalchemy.ext.declarative import declarative_base
+
 
 asyncpg_introspection_issue = dict(connect_args={"server_settings": {"jit": "off"}})
+Base = declarative_base()
 
 DATABASE_CONNECTION_URL = URL.create(
     drivername="postgresql+asyncpg",
@@ -33,6 +36,14 @@ async_session_factory = async_sessionmaker(
 async def get_session() -> AsyncSession:
     async with async_session_factory() as session:
         yield session
+
+
+async def init_db():
+    """Инициализация базы данных и создание таблиц"""
+    async with async_engine.begin() as conn:
+        # Создаем таблицу
+        await conn.run_sync(Base.metadata.create_all)
+    logger.info("БД инициализирована и таблица создана")
 
 
 async def insert_address_info(address: str, balance_trx: float, session: AsyncSession):

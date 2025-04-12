@@ -16,7 +16,7 @@ services:
 
     postgresql:
         image: bitnami/postgresql:14.2.0-debian-10-r35
-        container_name: db
+        container_name: db_host
         networks:
             - bot_network
         ports:

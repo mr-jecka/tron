@@ -6,7 +6,7 @@ from src.schemas import AddressRequest, AddressInfoResponse
 from tronpy.providers import AsyncHTTPProvider
 from tronpy import AsyncTron
 from src.config import TRON_NODE, API_KEY_TRON
-from src.database import async_session_factory, insert_address_info, get_address_info_from_db
+from src.database import async_session_factory, insert_address_info, get_address_info_from_db, init_db
 from typing import List
 
 
@@ -17,7 +17,13 @@ async def run_uvicorn():
     """ Запуск Uvicorn-сервера в отдельной задаче """
     config = uvicorn.Config(app, host="0.0.0.0", port=8000, log_level="info")
     server = uvicorn.Server(config)
+
+    # Инициализация базы данных
+    await init_db()
+
+    # Запуск сервера
     await server.serve()
+
 
 # Конфигурация подключения к TRON
 TRON_NODE = TRON_NODE  # Основная сеть TRON
