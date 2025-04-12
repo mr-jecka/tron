@@ -1,0 +1,9 @@
+asyncpg
+tronpy
+pydantic
+fastapi
+uvicorn
+sqlalchemy
+pytest
+pytest-asyncio
+
