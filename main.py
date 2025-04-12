@@ -1,3 +1,4 @@
+import asyncio
 from src.logger import logger
 from fastapi import FastAPI, HTTPException, Query
 import uvicorn
@@ -11,6 +12,12 @@ from typing import List
 
 app = FastAPI(title="Микросервис предоставления информации по адресам в блокчейне TRON")
 
+
+async def run_uvicorn():
+    """ Запуск Uvicorn-сервера в отдельной задаче """
+    config = uvicorn.Config(app, host="0.0.0.0", port=8000, log_level="info")
+    server = uvicorn.Server(config)
+    await server.serve()
 
 # Конфигурация подключения к TRON
 TRON_NODE = TRON_NODE  # Основная сеть TRON
@@ -106,4 +113,5 @@ async def get_address_info_list(
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run_uvicorn())
